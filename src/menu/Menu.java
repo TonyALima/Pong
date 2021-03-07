@@ -1,6 +1,8 @@
 package menu;
 
 import dataManipulation.Record;
+import game.Window;
+import player.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,247 +11,267 @@ import java.io.IOException;
 
 public class Menu extends Record {
 
-    private final JButton selectButton;
-    private final JButton removeButton;
-    private final JButton addButton;
-    private final JButton playButton;
-    private final JPanel menuPanel;
-    private final JPanel selectPanel;
-    private final JPanel addPanel;
-    private final JPanel removePanel;
-    private final JLabel nameLabel;
-    private final JLabel insertNameLabel;
-    private final JLabel removeLabel;
-    private final JLabel selectLabel;
-    private final JComboBox<String> players;
-    private final JTextField newPlayer;
-    private final Color backButtons = new Color(100, 100, 100);
-    private final Color backPanels = new Color(200, 200, 200);
-    private final Font font = new Font("Times", Font.PLAIN, 15);
-    private final Thread canvasThread;
-    public static boolean isSelect, isRemove;
+    private final JButton SELECT_BUTTON;
+    private final JButton REMOVE_BUTTON;
+    private final JButton ADD_BUTTON;
+    private final JButton PLAY_BUTTON;
+    private final JButton RANKING_BUTTON;
+    private final JPanel MENU_PANEL;
+    private final JPanel SELECT_PANEL;
+    private final JPanel ADD_PANEL;
+    private final JPanel REMOVE_PANEL;
+    private final JLabel NAME_LABEL;
+    private final JLabel NEW_NAME_LABEL;
+    private final JLabel REMOVE_LABEL;
+    private final JLabel SELECT_LABEL;
+    private final JComboBox<String> PLAYERS;
+    private final JTextField NEW_PLAYER;
+    private final Color BACK_BUTTONS_COLOR = new Color(100, 100, 100);
+    private final Color BACK_PANELS_COLOR = new Color(200, 200, 200);
+    private final Color FONT_COLOR = new Color(220, 220, 220);
+    private final Font FONT = new Font("Times", Font.BOLD, 15);
+    private final Thread windowThread;
 
-    public Menu(Thread gameThread) {
+    // Constructor
+    public Menu(Thread windowThread) {
         playerDataExists();
-        this.selectLabel = new JLabel("Escolha");
-        this.removeLabel = new JLabel("Remover");
-        this.nameLabel = new JLabel("Bom dia");
-        this.insertNameLabel = new JLabel("Seu nome:");
-        this.selectButton = new JButton("Selecionar jogador");
-        this.addButton = new JButton("adicionar jogador");
-        this.removeButton = new JButton("Remover jogador");
-        this.playButton = new JButton("PLAY");
-        this.players = new JComboBox<>();
-        this.newPlayer = new JTextField();
+        this.SELECT_LABEL = new JLabel("Escolha");
+        this.REMOVE_LABEL = new JLabel("        Remover        ");
+        this.NAME_LABEL = new JLabel("Bom dia");
+        this.NEW_NAME_LABEL = new JLabel("  Seu nome:  ");
+        this.SELECT_BUTTON = new JButton("Selecionar jogador");
+        this.ADD_BUTTON = new JButton("Adicionar jogador");
+        this.REMOVE_BUTTON = new JButton("Remover jogador");
+        this.PLAY_BUTTON = new JButton("PLAY");
+        this.RANKING_BUTTON = new JButton("RANKING");
+        this.PLAYERS = new JComboBox<>();
+        this.NEW_PLAYER = new JTextField();
         startComponents();
-        this.menuPanel = new JPanel();
-        this.selectPanel = new JPanel();
-        this.addPanel = new JPanel();
-        this.removePanel = new JPanel();
+        this.MENU_PANEL = new JPanel();
+        this.SELECT_PANEL = new JPanel();
+        this.ADD_PANEL = new JPanel();
+        this.REMOVE_PANEL = new JPanel();
         startPanels();
-        this.canvasThread = gameThread;
+        this.windowThread = windowThread;
+        Window.setSelect();
     }
 
-    public JPanel getMenuPanel() {
-        return menuPanel;
+    // Getters
+    public JPanel getMENU_PANEL() {
+        return MENU_PANEL;
     }
 
-    public JPanel getSelectPanel() {
-        return selectPanel;
+    public JPanel getSELECT_PANEL() {
+        return SELECT_PANEL;
     }
 
-    public JPanel getAddPanel() {
-        return addPanel;
+    public JPanel getADD_PANEL() {
+        return ADD_PANEL;
     }
 
-    public JPanel getRemovePanel() {
-        return removePanel;
+    public JPanel getREMOVE_PANEL() {
+        return REMOVE_PANEL;
     }
 
+    // Methods
     private void startComponents() {
-        selectButton.setBackground(backButtons);
-        selectButton.setFont(font);
-        selectButton.addActionListener(e -> {
-            updatePlayersList();
-            //setSelectTrue();
-            synchronized (canvasThread) {
-                canvasThread.notify();
+        NEW_NAME_LABEL.setFont(FONT);
+        REMOVE_LABEL.setFont(FONT);
+        NAME_LABEL.setFont(FONT);
+        SELECT_LABEL.setFont(FONT);
+
+        SELECT_BUTTON.setBackground(BACK_BUTTONS_COLOR);
+        SELECT_BUTTON.setFont(FONT);
+        SELECT_BUTTON.setForeground(FONT_COLOR);
+        SELECT_BUTTON.addActionListener(e -> {
+            Window.setSelect();
+            synchronized (windowThread) {
+                windowThread.notify();
             }
         }); // go to selectPanel
 
-        //setSelectTrue();
-        updatePlayersList();
-
-        addButton.setBackground(backButtons);
-        addButton.setFont(font);
-        addButton.addActionListener(e -> {
-            //setAddTrue();
-            synchronized (canvasThread) {
-                canvasThread.notify();
+        ADD_BUTTON.setBackground(BACK_BUTTONS_COLOR);
+        ADD_BUTTON.setFont(FONT);
+        ADD_BUTTON.setForeground(FONT_COLOR);
+        ADD_BUTTON.addActionListener(e -> {
+            Window.setAdd();
+            synchronized (windowThread) {
+                windowThread.notify();
             }
         }); // go to addPanel
 
-        removeButton.setBackground(backButtons);
-        removeButton.setFont(font);
-        removeButton.addActionListener(e -> {
-            updatePlayersList();
-            //setRemoveTrue();
-            synchronized (canvasThread) {
-                canvasThread.notify();
+        REMOVE_BUTTON.setBackground(BACK_BUTTONS_COLOR);
+        REMOVE_BUTTON.setFont(FONT);
+        REMOVE_BUTTON.setForeground(FONT_COLOR);
+        REMOVE_BUTTON.addActionListener(e -> {
+            Window.setRemove();
+            synchronized (windowThread) {
+                windowThread.notify();
             }
         }); // go to removePanel
 
-        playButton.setBackground(backButtons);
-        playButton.setFont(font);
-        playButton.addActionListener(e -> {
-            //setPlayTrue();
-            synchronized (canvasThread) {
-                canvasThread.notify();
+        RANKING_BUTTON.setBackground(BACK_BUTTONS_COLOR);
+        RANKING_BUTTON.setFont(FONT);
+        RANKING_BUTTON.setForeground(FONT_COLOR);
+        RANKING_BUTTON.addActionListener(e -> {
+            System.out.println("Ranking working");
+        });
+
+        PLAY_BUTTON.setBackground(BACK_BUTTONS_COLOR);
+        PLAY_BUTTON.setFont(FONT);
+        PLAY_BUTTON.setForeground(FONT_COLOR);
+        PLAY_BUTTON.addActionListener(e -> {
+            Window.setPlay();
+            synchronized (windowThread) {
+                windowThread.notify();
             }
         }); // go to the game
 
-        newPlayer.setFont(font);
-        newPlayer.addActionListener(e -> {
-            addPlayer(newPlayer.getText());
-            String command = "java -jar " + new File("").getAbsolutePath() + "/Forca_jar.jar";
+        NEW_PLAYER.setFont(FONT);
+        NEW_PLAYER.addActionListener(e -> {
+            addPlayer(NEW_PLAYER.getText());
+            /*
+            String command = "java -jar " + new File("").getAbsolutePath() + "/Pong.jar";
             try {
                 Runtime.getRuntime().exec(command);
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
+             */
             System.exit(0);
         });
 
+        String[] list = new String[getAmountOfPlayers()];
+        String[][] listPlayers = listPlayers();
+        for (int i = 0; i < getAmountOfPlayers(); i++)
+            list[i] = listPlayers[i][0];
 
+        PLAYERS.setFont(FONT);
+        PLAYERS.setModel(new DefaultComboBoxModel<>(list));
+        PLAYERS.addActionListener(e -> {
+            int numberPlayer = PLAYERS.getSelectedIndex();
+            if (Window.isRemove()) {
+                removePlayer(numberPlayer);
+                /*
+                String command = "java -jar " + new File("").getAbsolutePath() + "/Pong.jar";
+                try {
+                    Runtime.getRuntime().exec(command);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                 */
+                System.exit(0);
+            } else if (Window.isSelect()) {
+                Player.setNumberPlayer(numberPlayer);
+                Player.setName(listPlayers[numberPlayer][0]);
+                Player.setRecord(Integer.parseInt(listPlayers[numberPlayer][1]));
+            }
+            Window.setMenu();
+            synchronized (windowThread) {
+                windowThread.notify();
+            }
+        });
     }
 
     private void startPanels() {
-        GroupLayout menuLayout = new GroupLayout(menuPanel);
-        menuPanel.setLayout(menuLayout);
+        GroupLayout menuLayout = new GroupLayout(MENU_PANEL);
+        MENU_PANEL.setLayout(menuLayout);
         menuLayout.setHorizontalGroup(
                 menuLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addGap(20)
-                        .addComponent(nameLabel)
-                        .addComponent(selectButton)
-                        .addComponent(playButton)
+                        .addComponent(NAME_LABEL)
+                        .addComponent(SELECT_BUTTON)
+                        .addComponent(PLAY_BUTTON)
                         .addGap(20)
         );
         menuLayout.setVerticalGroup(
                 menuLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addGroup(menuLayout.createSequentialGroup()
                                 .addGap(20)
-                                .addComponent(nameLabel)
+                                .addComponent(NAME_LABEL)
                                 .addGap(10)
-                                .addComponent(selectButton)
+                                .addComponent(SELECT_BUTTON)
                                 .addGap(10)
-                                .addComponent(playButton)
+                                .addComponent(PLAY_BUTTON)
                                 .addGap(20))
 
         );
-        menuPanel.setBackground(backPanels);
+        MENU_PANEL.setBackground(BACK_PANELS_COLOR);
 
-        GroupLayout selectLayout = new GroupLayout(selectPanel);
-        selectPanel.setLayout(selectLayout);
+        GroupLayout selectLayout = new GroupLayout(SELECT_PANEL);
+        SELECT_PANEL.setLayout(selectLayout);
         selectLayout.setHorizontalGroup(
-                selectLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                        .addGap(20)
-                        .addComponent(selectLabel)
-                        .addComponent(players)
-                        .addComponent(addButton)
-                        .addComponent(removeButton)
-                        .addGap(20)
+                selectLayout.createSequentialGroup()
+                        .addGap(10)
+                        .addGroup(
+                                selectLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                                        .addComponent(SELECT_LABEL)
+                                        .addComponent(PLAYERS)
+                                        .addComponent(ADD_BUTTON)
+                                        .addComponent(REMOVE_BUTTON)
+                                        .addComponent(RANKING_BUTTON))
+                        .addGap(10)
         );
         selectLayout.setVerticalGroup(
                 selectLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addGroup(selectLayout.createSequentialGroup()
                                 .addGap(20)
-                                .addComponent(selectLabel)
+                                .addComponent(SELECT_LABEL)
                                 .addGap(10)
-                                .addComponent(players)
+                                .addComponent(PLAYERS)
                                 .addGap(10)
-                                .addComponent(addButton)
+                                .addComponent(ADD_BUTTON)
                                 .addGap(10)
-                                .addComponent(removeButton)
+                                .addComponent(REMOVE_BUTTON)
+                                .addGap(10)
+                                .addComponent(RANKING_BUTTON)
                                 .addGap(20))
 
         );
-        selectPanel.setBackground(backPanels);
+        SELECT_PANEL.setBackground(BACK_PANELS_COLOR);
 
-        GroupLayout addLayout = new GroupLayout(addPanel);
-        addPanel.setLayout(addLayout);
+        GroupLayout addLayout = new GroupLayout(ADD_PANEL);
+        ADD_PANEL.setLayout(addLayout);
         addLayout.setHorizontalGroup(
                 addLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addGroup(addLayout.createSequentialGroup()
                                 .addGap(20)
                                 .addGroup(addLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                                        .addComponent(insertNameLabel)
-                                        .addComponent(newPlayer))
+                                        .addComponent(NEW_NAME_LABEL)
+                                        .addComponent(NEW_PLAYER))
                                 .addGap(20))
         );
         addLayout.setVerticalGroup(
                 addLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addGroup(addLayout.createSequentialGroup()
                                 .addGap(10)
-                                .addComponent(insertNameLabel)
+                                .addComponent(NEW_NAME_LABEL)
                                 .addGap(5)
-                                .addComponent(newPlayer)
+                                .addComponent(NEW_PLAYER)
                                 .addGap(10))
         );
-        addPanel.setBackground(backPanels);
+        ADD_PANEL.setBackground(BACK_PANELS_COLOR);
 
-        GroupLayout removeLayout = new GroupLayout(removePanel);
-        removePanel.setLayout(removeLayout);
+        GroupLayout removeLayout = new GroupLayout(REMOVE_PANEL);
+        REMOVE_PANEL.setLayout(removeLayout);
         removeLayout.setHorizontalGroup(
-                removeLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                        .addGap(5)
-                        .addComponent(removeLabel)
-                        .addComponent(players)
-                        .addGap(5)
-
+                removeLayout.createSequentialGroup()
+                        .addGap(10)
+                        .addGroup(
+                                removeLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                                        .addComponent(REMOVE_LABEL)
+                                        .addComponent(PLAYERS))
+                        .addGap(10)
         );
         removeLayout.setVerticalGroup(
                 removeLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addGroup(removeLayout.createSequentialGroup()
                                 .addGap(10)
-                                .addComponent(removeLabel)
+                                .addComponent(REMOVE_LABEL)
                                 .addGap(5)
-                                .addComponent(players)
+                                .addComponent(PLAYERS)
                                 .addGap(10))
         );
-        removePanel.setBackground(backPanels);
+        REMOVE_PANEL.setBackground(BACK_PANELS_COLOR);
     }
-
-    public void updatePlayersList() {
-        String[] list = new String[getAmountOfPlayers()];
-        String[][] listPlayers = listPlayers();
-        for (int i = 0; i < getAmountOfPlayers(); i++)
-            list[i] = i + ": " + listPlayers[i][0] + " / Record -> " + listPlayers[i][1];
-
-        players.setFont(font);
-        players.setModel(new DefaultComboBoxModel<>(list));
-        players.addActionListener(e -> {
-            int numberPlayer = players.getSelectedIndex();
-            if (isRemove) {
-                removePlayer(numberPlayer);
-                String command = "java -jar " + new File("").getAbsolutePath() + "/Forca_jar.jar";
-                try {
-                    Runtime.getRuntime().exec(command);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-                System.exit(0);
-            }else if (isSelect) {
-                /*
-                Player.setNumberPlayer(numberPlayer);
-                Player.setName(listPlayers[numberPlayer][0]);
-                Player.setRecord(Integer.parseInt(listPlayers[numberPlayer][1]));
-                 */
-            }
-            //setMenuTrue();
-            synchronized (canvasThread) {
-                canvasThread.notify();
-            }
-        });
-    }
-
 }
