@@ -13,11 +13,11 @@ public class Window implements Runnable {
     private final Thread windowThread;
     private static boolean play, menu, select, add, remove;
 
-    private final Render render;
+    private final Game game;
 
     // Constructor
     public Window() {
-        this.render = new Render();
+        this.game = new Game();
 
         this.windowThread = new Thread(this);
         this.windowThread.start();
@@ -97,8 +97,8 @@ public class Window implements Runnable {
             frame.remove(currentIn.getComponent(0));
 
             if (play) {
-                render.getRenderThread().start();
-                frame.add(render.getCanvas());
+                game.getRenderThread().start();
+                frame.add(game.getCanvas());
             } else if (menu) {
                 frame.add(menuParts.getMENU_PANEL());
             } else if (select) {

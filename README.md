@@ -1,2 +1,2 @@
 # Pong
- A version of pong game
+ A version of the pong game

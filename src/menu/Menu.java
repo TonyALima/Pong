@@ -2,12 +2,10 @@ package menu;
 
 import dataManipulation.Record;
 import game.Window;
-import player.Player;
+import players.Player;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class Menu extends Record {
 
