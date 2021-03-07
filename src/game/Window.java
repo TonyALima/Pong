@@ -5,7 +5,7 @@ import menu.Menu;
 import javax.swing.*;
 import java.awt.*;
 
-public class Window extends Canvas implements Runnable {
+public class Window implements Runnable {
 
     private JFrame frame;
 
@@ -17,20 +17,13 @@ public class Window extends Canvas implements Runnable {
 
     // Constructor
     public Window() {
-        // Canvas dimensions
-        final int FACTOR = 80;
-        final int WIDTH = 4 * FACTOR;
-        final int HEIGHT = 3 * FACTOR;
-        final int SCALE = 2;
-
-        this.render = new Render(SCALE, WIDTH, HEIGHT, this);
+        this.render = new Render();
 
         this.windowThread = new Thread(this);
         this.windowThread.start();
 
         this.menuParts = new Menu(windowThread);
 
-        this.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
         initFrame();
     }
 
@@ -105,7 +98,7 @@ public class Window extends Canvas implements Runnable {
 
             if (play) {
                 render.getRenderThread().start();
-                frame.add(this);
+                frame.add(render.getCanvas());
             } else if (menu) {
                 frame.add(menuParts.getMENU_PANEL());
             } else if (select) {
@@ -117,7 +110,7 @@ public class Window extends Canvas implements Runnable {
             }
             frame.pack();
             frame.setLocationRelativeTo(null);
-            requestFocus();
+            frame.requestFocus();
         }
     }
 }

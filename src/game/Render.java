@@ -7,22 +7,21 @@ import java.awt.image.BufferedImage;
 public class Render implements Runnable {
 
     private final Image image;
-    // Image dimensions
-    private final int WIDTH;
-    private final int HEIGHT;
-    private final int SCALE;
+    // dimensions
+    final int FACTOR = 80;
+    final int WIDTH = 4 * FACTOR;
+    final int HEIGHT = 3 * FACTOR;
+    final int SCALE = 2;
 
     private boolean isRunning;
     private final Canvas canvas;
     private final Thread renderThread;
 
     // Constructor
-    public Render( int SCALE, int WIDTH, int HEIGHT, Canvas canvas) {
-        this.SCALE = SCALE;
-        this.WIDTH = WIDTH;
-        this.HEIGHT = HEIGHT;
+    public Render() {
         this.image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-        this.canvas = canvas;
+        this.canvas = new Canvas();
+        this.canvas.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
         this.renderThread = new Thread(this);
         this.isRunning = true;
     }
@@ -33,9 +32,12 @@ public class Render implements Runnable {
         return renderThread;
     }
 
-    // Methods
+    public Canvas getCanvas() {
+        return canvas;
+    }
 
-    public void render(Canvas canvas) {
+    // Methods
+    public void render() {
         BufferStrategy bs = canvas.getBufferStrategy();
         if (bs == null) {
             canvas.createBufferStrategy(3);
@@ -46,6 +48,10 @@ public class Render implements Runnable {
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
         // Render graphics init
+
+        g.setFont(new Font("Times", Font.PLAIN, 30));
+        g.setColor(new Color(0,255,0));
+        g.drawString("teste", 100,100);
 
         // Render graphics end
 
@@ -66,10 +72,9 @@ public class Render implements Runnable {
             delta += (now - lastTime)/ ns;
             lastTime = now;
             if(delta >= 1){
-                render(canvas);
+                render();
                 delta--;
             }
         }
-        //game.stop();
     }
 }
