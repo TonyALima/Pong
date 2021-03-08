@@ -1,12 +1,11 @@
 package menu;
 
-import dataManipulation.Record;
 import game.Window;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class Menu extends Record {
+public class Menu {
 
     private final JButton SELECT_MULTIPLAYER_BUTTON;
     private final JButton PLAY_BUTTON;

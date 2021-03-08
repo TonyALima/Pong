@@ -9,7 +9,6 @@ public class Ball extends Entity {
 
 
     private double dx, dy;
-    private final double speed = 3;
     private final boolean multiplayer;
 
     // Constructor
@@ -40,6 +39,7 @@ public class Ball extends Entity {
 
     // Methods
     public void tick(int limitX, int limitY) {
+        double speed = 3;
         this.x += dx * speed;
         this.y += dy * speed;
 

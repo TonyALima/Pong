@@ -22,7 +22,7 @@ public class Game implements Runnable, KeyListener {
     private boolean isRunning;
     private boolean pause;
     public boolean multiplayer;
-    private Color background;
+    private final Color background;
     private final Canvas canvas;
     private final Thread renderThread;
     private static Player player1, player2;
