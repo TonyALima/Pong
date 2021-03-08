@@ -19,37 +19,38 @@ public class Game implements Runnable, KeyListener {
     final int HEIGHT = 3 * FACTOR;
     final int SCALE = 1;
 
-    private boolean isRunning, pause;
+    private boolean isRunning;
+    private boolean pause;
+    public boolean multiplayer;
     private Color background;
     private final Canvas canvas;
     private final Thread renderThread;
-    private Player player1, player2;
-    private Enemy enemy;
-    private Ball ball;
-
+    private static Player player1, player2;
+    private static Enemy enemy;
+    private static Ball ball;
 
     // Constructor
-    public Game(boolean light) {
+    public Game( boolean multiplayer) {
         this.image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         this.canvas = new Canvas();
         this.canvas.addKeyListener(this);
         this.canvas.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
         this.renderThread = new Thread(this);
         this.isRunning = true;
+        this.multiplayer = multiplayer;
 
         Color color1 = new Color(36, 36, 220);
         player1 = new Player(240, HEIGHT - 24, color1);
 
         Color color2 = new Color(220, 36, 36);
-        enemy = new Enemy(240, 8, color2);
-
-        ball = new Ball();
-
-        if (light) {
-            background = new Color(200, 200, 200);
+        if (multiplayer) {
+            player2 = new Player(240, 8, color2);
         } else {
-            background = new Color(50, 50, 50);
+            enemy = new Enemy(240, 8, color2);
         }
+        ball = new Ball(multiplayer);
+
+        background = new Color(50, 50, 50);
     }
 
     // Getters
@@ -62,12 +63,46 @@ public class Game implements Runnable, KeyListener {
         return canvas;
     }
 
+    public static Player getPlayer1() {
+        return player1;
+    }
+
+    public static Player getPlayer2() {
+        return player2;
+    }
+
+    public static Enemy getEnemy() {
+        return enemy;
+    }
+
+    public static Ball getBall() {
+        return ball;
+    }
+
     // Methods
+
+    public static void restart(int HEIGHT, boolean multiplayer) {
+        Color color1 = new Color(36, 36, 220);
+        player1 = new Player(240, HEIGHT - 24, color1);
+
+        Color color2 = new Color(220, 36, 36);
+        if (multiplayer) {
+            player2 = new Player(240, 8, color2);
+        } else {
+            enemy = new Enemy(240, 8, color2);
+        }
+
+        ball = new Ball(multiplayer);
+    }
 
     public void tick() {
         player1.tick(WIDTH);
-        enemy.tick();
-        ball.tick();
+        if (multiplayer) {
+            player2.tick(WIDTH);
+        } else {
+            enemy.tick();
+        }
+        ball.tick(WIDTH, HEIGHT);
     }
 
     public void render() {
@@ -83,13 +118,17 @@ public class Game implements Runnable, KeyListener {
         // Render graphics init
 
         g.setFont(new Font("Times", Font.PLAIN, 30));
-        g.setColor(new Color(0, 255, 0,100));
+        g.setColor(new Color(0, 255, 0, 100));
         g.drawString("teste", 240, 250);
 
         // Render graphics end
 
         player1.render(g);
-        enemy.render(g);
+        if (multiplayer) {
+            player2.render(g);
+        } else {
+            enemy.render(g);
+        }
         ball.render(g);
 
         g.dispose();
@@ -127,8 +166,18 @@ public class Game implements Runnable, KeyListener {
             player1.setRight(true);
         } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             player1.setLeft(true);
-        } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+        }
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             pause = !pause;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_A) {
+            if (multiplayer) {
+                player2.setLeft(true);
+            }
+        } else if (e.getKeyCode() == KeyEvent.VK_D) {
+            if (multiplayer) {
+                player2.setRight(true);
+            }
         }
     }
 
@@ -138,6 +187,15 @@ public class Game implements Runnable, KeyListener {
             player1.setRight(false);
         } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             player1.setLeft(false);
+        }
+        if (e.getKeyCode() == KeyEvent.VK_A) {
+            if (multiplayer) {
+                player2.setLeft(false);
+            }
+        } else if (e.getKeyCode() == KeyEvent.VK_D) {
+            if (multiplayer) {
+                player2.setRight(false);
+            }
         }
     }
 }

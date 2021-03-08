@@ -11,14 +11,12 @@ public class Window implements Runnable {
 
     private final Menu menuParts;
     private final Thread windowThread;
-    private static boolean play, menu, select, add, remove;
+    private static boolean play, menu, selectMultiplayer, options;
 
-    private final Game game;
+    private Game game;
 
     // Constructor
     public Window() {
-        this.game = new Game(false);
-
         this.windowThread = new Thread(this);
         this.windowThread.start();
 
@@ -27,24 +25,13 @@ public class Window implements Runnable {
         initFrame();
     }
 
-    // Getters
-
-    public static boolean isSelect() {
-        return select;
-    }
-
-    public static boolean isRemove() {
-        return remove;
-    }
-
     // Setters
 
     private static void setAllFalse() {
         Window.play = false;
         Window.menu = false;
-        Window.select = false;
-        Window.add = false;
-        Window.remove = false;
+        Window.selectMultiplayer = false;
+        Window.options = false;
     }
 
     public static void setPlay() {
@@ -57,25 +44,20 @@ public class Window implements Runnable {
         Window.menu = true;
     }
 
-    public static void setSelect() {
+    public static void setMultiplayer() {
         setAllFalse();
-        Window.select = true;
+        Window.selectMultiplayer = true;
     }
 
-    public static void setAdd() {
+    public static void setOptions() {
         setAllFalse();
-        Window.add = true;
-    }
-
-    public static void setRemove() {
-        setAllFalse();
-        Window.remove = true;
+        Window.options = true;
     }
 
     // Methods
     private void initFrame() {
         frame = new JFrame("PONG");
-        frame.add(menuParts.getSELECT_PANEL());
+        frame.add(menuParts.getMULTIPLAYER_PANEL());
         frame.setResizable(false);
         frame.pack();
         frame.setLocationRelativeTo(null);
@@ -97,17 +79,16 @@ public class Window implements Runnable {
             frame.remove(currentIn.getComponent(0));
 
             if (play) {
+                this.game = new Game(menuParts.isMultiplayer());
                 game.getRenderThread().start();
                 frame.add(game.getCanvas());
                 game.getCanvas().requestFocus();
             } else if (menu) {
                 frame.add(menuParts.getMENU_PANEL());
-            } else if (select) {
-                frame.add(menuParts.getSELECT_PANEL());
-            } else if (add) {
-                frame.add(menuParts.getADD_PANEL());
-            } else if (remove) {
-                frame.add(menuParts.getREMOVE_PANEL());
+            } else if (options) {
+                frame.add(menuParts.getOPTIONS_PANEL());
+            }else if (selectMultiplayer){
+                frame.add(menuParts.getMULTIPLAYER_PANEL());
             }
             frame.pack();
             frame.setLocationRelativeTo(null);

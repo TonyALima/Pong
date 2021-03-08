@@ -1,17 +1,19 @@
 package tests;
 
+import java.util.Random;
+
 public class TestRandom {
 
     public static void main(String[] args) {
         double fracAngle;
         double angle;
 
-        for (int i = 1; i < 5; i++) {
-            if ((i % 2) == 0) {
+        for (int p = 1; p < 5; p++) {
+            if ((p % 2) == 0) {
                 do {
                     fracAngle = Math.random();
                 } while (fracAngle < (1f / 4) || fracAngle > (3f / 4));
-            }else {
+            } else {
                 do {
                     fracAngle = (Math.random() + 1);
                 } while (fracAngle > (7f / 4) || fracAngle < (5f / 4));

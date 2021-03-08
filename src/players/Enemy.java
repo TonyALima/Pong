@@ -1,5 +1,7 @@
 package players;
 
+import game.Game;
+
 import java.awt.*;
 
 public class Enemy extends Entity{
@@ -15,6 +17,6 @@ public class Enemy extends Entity{
 
     // Methods
     public void tick(){
-
+        this.x += (Game.getBall().x - this.x - 72);
     }
 }

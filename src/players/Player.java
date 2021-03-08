@@ -4,8 +4,7 @@ import java.awt.*;
 
 public class Player extends Entity{
 
-    private static int numberPlayer, record, currentScore;
-    private static String name;
+    private static int currentScore;
     private boolean right, left;
 
     // Constructor
@@ -19,20 +18,8 @@ public class Player extends Entity{
 
     // Setters
 
-    public static void setNumberPlayer(int numberPlayer) {
-        Player.numberPlayer = numberPlayer;
-    }
-
-    public static void setRecord(int record) {
-        Player.record = record;
-    }
-
     public static void setCurrentScore(int currentScore) {
         Player.currentScore = currentScore;
-    }
-
-    public static void setName(String name) {
-        Player.name = name;
     }
 
     public void setRight(boolean right) {
@@ -55,10 +42,5 @@ public class Player extends Entity{
         }else if (x > (limit - width)){
             x = limit - width;
         }
-    }
-
-    public void render(Graphics g){
-        g.setColor(color);
-        g.fillRect(x,y,width,height);
     }
 }
