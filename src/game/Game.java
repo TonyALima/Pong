@@ -28,6 +28,7 @@ public class Game implements Runnable, KeyListener {
     private static Player player1, player2;
     private static Enemy enemy;
     private static Ball ball;
+    public static int scoreUp, scoreDown;
 
     // Constructor
     public Game( boolean multiplayer) {
@@ -40,13 +41,13 @@ public class Game implements Runnable, KeyListener {
         this.multiplayer = multiplayer;
 
         Color color1 = new Color(36, 36, 220);
-        player1 = new Player(240, HEIGHT - 24, color1);
+        player1 = new Player(240, HEIGHT - 48, color1);
 
         Color color2 = new Color(220, 36, 36);
         if (multiplayer) {
-            player2 = new Player(240, 8, color2);
+            player2 = new Player(240, 32, color2);
         } else {
-            enemy = new Enemy(240, 8, color2);
+            enemy = new Enemy(240, 32, color2);
         }
         ball = new Ball(multiplayer);
 
@@ -83,13 +84,13 @@ public class Game implements Runnable, KeyListener {
 
     public static void restart(int HEIGHT, boolean multiplayer) {
         Color color1 = new Color(36, 36, 220);
-        player1 = new Player(240, HEIGHT - 24, color1);
+        player1 = new Player(240, HEIGHT - 48, color1);
 
         Color color2 = new Color(220, 36, 36);
         if (multiplayer) {
-            player2 = new Player(240, 8, color2);
+            player2 = new Player(240, 32, color2);
         } else {
-            enemy = new Enemy(240, 8, color2);
+            enemy = new Enemy(240, 32, color2);
         }
 
         ball = new Ball(multiplayer);
@@ -115,13 +116,9 @@ public class Game implements Runnable, KeyListener {
         g.setColor(background);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
-        // Render graphics init
-
-        g.setFont(new Font("Times", Font.PLAIN, 30));
-        g.setColor(new Color(0, 255, 0, 100));
-        g.drawString("teste", 240, 250);
-
-        // Render graphics end
+        g.setFont(new Font("Times", Font.PLAIN, 50));
+        g.setColor(new Color(0, 255, 0, 80));
+        g.drawString("ARENA", 240, 250);
 
         player1.render(g);
         if (multiplayer) {
@@ -130,6 +127,11 @@ public class Game implements Runnable, KeyListener {
             enemy.render(g);
         }
         ball.render(g);
+
+        g.setColor(new Color(200,200,200));
+        g.setFont(new Font("Times", Font.PLAIN, 20));
+        g.drawString("Pontos: " + scoreUp, 280, 26);
+        g.drawString("Pontos: " + scoreDown, 280, HEIGHT - 6);
 
         g.dispose();
         g = bs.getDrawGraphics();

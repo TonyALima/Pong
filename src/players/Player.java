@@ -4,7 +4,6 @@ import java.awt.*;
 
 public class Player extends Entity{
 
-    private static int currentScore;
     private boolean right, left;
 
     // Constructor
@@ -17,10 +16,6 @@ public class Player extends Entity{
     }
 
     // Setters
-
-    public static void setCurrentScore(int currentScore) {
-        Player.currentScore = currentScore;
-    }
 
     public void setRight(boolean right) {
         this.right = right;
