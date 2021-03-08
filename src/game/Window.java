@@ -17,7 +17,7 @@ public class Window implements Runnable {
 
     // Constructor
     public Window() {
-        this.game = new Game();
+        this.game = new Game(false);
 
         this.windowThread = new Thread(this);
         this.windowThread.start();
@@ -99,6 +99,7 @@ public class Window implements Runnable {
             if (play) {
                 game.getRenderThread().start();
                 frame.add(game.getCanvas());
+                game.getCanvas().requestFocus();
             } else if (menu) {
                 frame.add(menuParts.getMENU_PANEL());
             } else if (select) {
@@ -110,7 +111,6 @@ public class Window implements Runnable {
             }
             frame.pack();
             frame.setLocationRelativeTo(null);
-            frame.requestFocus();
         }
     }
 }

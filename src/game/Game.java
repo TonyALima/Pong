@@ -1,5 +1,7 @@
 package game;
 
+import players.Ball;
+import players.Enemy;
 import players.Player;
 
 import java.awt.*;
@@ -12,29 +14,42 @@ public class Game implements Runnable, KeyListener {
 
     private final Image image;
     // dimensions
-    final int FACTOR = 80;
+    final int FACTOR = 160;
     final int WIDTH = 4 * FACTOR;
     final int HEIGHT = 3 * FACTOR;
-    final int SCALE = 2;
+    final int SCALE = 1;
 
     private boolean isRunning, pause;
+    private Color background;
     private final Canvas canvas;
     private final Thread renderThread;
-    private Player player1;
-    private Player enemy;
+    private Player player1, player2;
+    private Enemy enemy;
+    private Ball ball;
+
 
     // Constructor
-    public Game() {
+    public Game(boolean light) {
         this.image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         this.canvas = new Canvas();
         this.canvas.addKeyListener(this);
         this.canvas.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
         this.renderThread = new Thread(this);
         this.isRunning = true;
+
         Color color1 = new Color(36, 36, 220);
-        player1 = new Player(100, HEIGHT-12, color1);
+        player1 = new Player(240, HEIGHT - 24, color1);
+
         Color color2 = new Color(220, 36, 36);
-        enemy = new Player(100,4, color2);
+        enemy = new Enemy(240, 8, color2);
+
+        ball = new Ball();
+
+        if (light) {
+            background = new Color(200, 200, 200);
+        } else {
+            background = new Color(50, 50, 50);
+        }
     }
 
     // Getters
@@ -48,9 +63,11 @@ public class Game implements Runnable, KeyListener {
     }
 
     // Methods
+
     public void tick() {
-    player1.tick(WIDTH);
-    enemy.tick(WIDTH);
+        player1.tick(WIDTH);
+        enemy.tick();
+        ball.tick();
     }
 
     public void render() {
@@ -60,19 +77,20 @@ public class Game implements Runnable, KeyListener {
             return;
         }
         Graphics g = image.getGraphics();
-        g.setColor(new Color(200, 200, 200));
+        g.setColor(background);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
         // Render graphics init
 
         g.setFont(new Font("Times", Font.PLAIN, 30));
-        g.setColor(new Color(0,255,0));
-        g.drawString("teste", 100,100);
+        g.setColor(new Color(0, 255, 0,100));
+        g.drawString("teste", 240, 250);
 
         // Render graphics end
 
         player1.render(g);
         enemy.render(g);
+        ball.render(g);
 
         g.dispose();
         g = bs.getDrawGraphics();
@@ -86,11 +104,11 @@ public class Game implements Runnable, KeyListener {
         double amountOfTicks = 60.0;
         double ns = 1000000000 / amountOfTicks;
         double delta = 0;
-        while(isRunning){
+        while (isRunning) {
             long now = System.nanoTime();
-            delta += (now - lastTime)/ ns;
+            delta += (now - lastTime) / ns;
             lastTime = now;
-            if(delta >= 1){
+            if (delta >= 1) {
                 tick();
                 render();
                 delta--;
@@ -105,20 +123,20 @@ public class Game implements Runnable, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT){
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             player1.setRight(true);
-        }else if (e.getKeyCode() == KeyEvent.VK_LEFT){
+        } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             player1.setLeft(true);
-        }else if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
+        } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             pause = !pause;
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT){
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             player1.setRight(false);
-        }else if (e.getKeyCode() == KeyEvent.VK_LEFT){
+        } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             player1.setLeft(false);
         }
     }
