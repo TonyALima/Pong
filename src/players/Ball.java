@@ -91,10 +91,10 @@ public class Ball extends Entity {
         }
 
         if (this.y < -height) {
-            System.out.println("ponto do jogador");
+            Game.scoreDown++;
             Game.restart(limitY, multiplayer, speed, enemyPrecision);
         } else if (this.y > limitY) {
-            System.out.println("ponto do inimigo");
+            Game.scoreUp++;
             Game.restart(limitY, multiplayer, speed, enemyPrecision);
         }
     }
