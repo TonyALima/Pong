@@ -10,9 +10,12 @@ public class Ball extends Entity {
 
     private double dx, dy;
     private final boolean multiplayer;
+    private double speed;
+
 
     // Constructor
-    public Ball(boolean multiplayer) {
+    public Ball(boolean multiplayer, double speed) {
+        this.speed = speed;
         this.multiplayer = multiplayer;
         this.x = 312;
         this.y = 232;
@@ -39,7 +42,6 @@ public class Ball extends Entity {
 
     // Methods
     public void tick(int limitX, int limitY) {
-        double speed = 3;
         this.x += dx * speed;
         this.y += dy * speed;
 
@@ -77,10 +79,10 @@ public class Ball extends Entity {
 
         if (this.y < -height) {
             System.out.println("ponto do jogador");
-            Game.restart(limitY, multiplayer);
+            Game.restart(limitY, multiplayer, speed);
         } else if (this.y > limitY) {
             System.out.println("ponto do inimigo");
-            Game.restart(limitY, multiplayer);
+            Game.restart(limitY, multiplayer, speed);
         }
     }
 }

@@ -27,6 +27,7 @@ public class Menu {
     private final Font FONT = new Font("Times", Font.BOLD, 15);
     private final Thread windowThread;
     private boolean multiplayer;
+    private int difficultyLevel;
 
     // Constructor
     public Menu(Thread windowThread) {
@@ -63,6 +64,10 @@ public class Menu {
 
     public JPanel getMULTIPLAYER_PANEL() {
         return MULTIPLAYER_PANEL;
+    }
+
+    public int getDifficultyLevel() {
+        return difficultyLevel;
     }
 
     // Methods
@@ -127,7 +132,7 @@ public class Menu {
         DIFFICULTY.setFont(FONT);
         DIFFICULTY.setModel(new DefaultComboBoxModel<>(list));
         DIFFICULTY.addActionListener(e -> {
-
+            difficultyLevel = DIFFICULTY.getSelectedIndex();
             Window.setMenu();
             synchronized (windowThread) {
                 windowThread.notify();

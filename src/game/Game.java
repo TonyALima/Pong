@@ -30,7 +30,10 @@ public class Game implements Runnable, KeyListener {
     private static Ball ball;
 
     // Constructor
-    public Game( boolean multiplayer) {
+    public Game(boolean multiplayer, int difficultyLevel) {
+
+        double[] settings = setDifficulty(difficultyLevel);
+
         this.image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         this.canvas = new Canvas();
         this.canvas.addKeyListener(this);
@@ -46,9 +49,9 @@ public class Game implements Runnable, KeyListener {
         if (multiplayer) {
             player2 = new Player(240, 8, color2);
         } else {
-            enemy = new Enemy(240, 8, color2);
+            enemy = new Enemy(240, 8, color2, settings[1]);
         }
-        ball = new Ball(multiplayer);
+        ball = new Ball(multiplayer, settings[0]);
 
         background = new Color(50, 50, 50);
     }
@@ -81,18 +84,33 @@ public class Game implements Runnable, KeyListener {
 
     // Methods
 
-    public static void restart(int HEIGHT, boolean multiplayer) {
+    public static void restart(int HEIGHT, boolean multiplayer, double speedBall) {
         Color color1 = new Color(36, 36, 220);
         player1 = new Player(240, HEIGHT - 24, color1);
 
         Color color2 = new Color(220, 36, 36);
         if (multiplayer) {
             player2 = new Player(240, 8, color2);
-        } else {
-            enemy = new Enemy(240, 8, color2);
         }
 
-        ball = new Ball(multiplayer);
+        ball = new Ball(multiplayer, speedBall);
+    }
+
+    private double[] setDifficulty(int difficulty){
+        double speedBall = 2.5;
+        double enemyPrecision = 0.05;
+
+        if (difficulty == 1){
+            speedBall = 3;
+            enemyPrecision = 0.3;
+        }else if (difficulty == 2){
+            speedBall = 3.5;
+            enemyPrecision = 0.5;
+        }else if (difficulty == 3){
+            speedBall = 4;
+            enemyPrecision = 0.7;
+        }
+        return new double[]{speedBall, enemyPrecision};
     }
 
     public void tick() {
