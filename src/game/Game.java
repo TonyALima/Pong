@@ -111,7 +111,7 @@ public class Game implements Runnable, KeyListener {
             enemyPrecision = 0.03;
         }else if (difficulty == 3){
             speedBall = 7;
-            enemyPrecision = 0.04;
+            enemyPrecision = 0.045;
         }
         return new double[]{speedBall, enemyPrecision};
     }
