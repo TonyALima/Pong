@@ -79,7 +79,7 @@ public class Window implements Runnable {
             frame.remove(currentIn.getComponent(0));
 
             if (play) {
-                this.game = new Game(menuParts.isMultiplayer());
+                this.game = new Game(menuParts.isMultiplayer(), menuParts.getDifficultyLevel());
                 game.getRenderThread().start();
                 frame.add(game.getCanvas());
                 game.getCanvas().requestFocus();

@@ -31,7 +31,10 @@ public class Game implements Runnable, KeyListener {
     public static int scoreUp, scoreDown;
 
     // Constructor
-    public Game( boolean multiplayer) {
+    public Game(boolean multiplayer, int difficultyLevel) {
+
+        double[] settings = setDifficulty(difficultyLevel);
+
         this.image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         this.canvas = new Canvas();
         this.canvas.addKeyListener(this);
@@ -47,9 +50,9 @@ public class Game implements Runnable, KeyListener {
         if (multiplayer) {
             player2 = new Player(240, 32, color2);
         } else {
-            enemy = new Enemy(240, 32, color2);
+            enemy = new Enemy(240, 32, color2, settings[1]);
         }
-        ball = new Ball(multiplayer);
+        ball = new Ball(multiplayer, settings[0], settings[1]);
 
         background = new Color(50, 50, 50);
     }
@@ -82,7 +85,7 @@ public class Game implements Runnable, KeyListener {
 
     // Methods
 
-    public static void restart(int HEIGHT, boolean multiplayer) {
+    public static void restart(int HEIGHT, boolean multiplayer, double speedBall, double precision) {
         Color color1 = new Color(36, 36, 220);
         player1 = new Player(240, HEIGHT - 48, color1);
 
@@ -90,10 +93,27 @@ public class Game implements Runnable, KeyListener {
         if (multiplayer) {
             player2 = new Player(240, 32, color2);
         } else {
-            enemy = new Enemy(240, 32, color2);
+            enemy = new Enemy(240, 32, color2, precision);
         }
 
-        ball = new Ball(multiplayer);
+        ball = new Ball(multiplayer, speedBall, precision);
+    }
+
+    private double[] setDifficulty(int difficulty){
+        double speedBall = 3.5;
+        double enemyPrecision = 0.01;
+
+        if (difficulty == 1){
+            speedBall = 4;
+            enemyPrecision = 0.025;
+        }else if (difficulty == 2){
+            speedBall = 6;
+            enemyPrecision = 0.03;
+        }else if (difficulty == 3){
+            speedBall = 7;
+            enemyPrecision = 0.04;
+        }
+        return new double[]{speedBall, enemyPrecision};
     }
 
     public void tick() {

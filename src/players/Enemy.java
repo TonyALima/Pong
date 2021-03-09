@@ -6,8 +6,11 @@ import java.awt.*;
 
 public class Enemy extends Entity{
 
+    private double precision;
+
     // Constructor
-    public Enemy(int x, int y, Color color){
+    public Enemy(int x, int y, Color color, double precision){
+        this.precision = precision;
         this.x = x;
         this.y = y;
         this.width = 160;
@@ -17,6 +20,6 @@ public class Enemy extends Entity{
 
     // Methods
     public void tick(){
-        this.x += (Game.getBall().x - this.x - 72);
+        this.x += (Game.getBall().x - this.x - 72 ) * precision;
     }
 }
