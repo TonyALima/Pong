@@ -51,7 +51,7 @@ public class Game implements Runnable, KeyListener {
         } else {
             enemy = new Enemy(240, 8, color2, settings[1]);
         }
-        ball = new Ball(multiplayer, settings[0]);
+        ball = new Ball(multiplayer, settings[0], settings[1]);
 
         background = new Color(50, 50, 50);
     }
@@ -84,31 +84,33 @@ public class Game implements Runnable, KeyListener {
 
     // Methods
 
-    public static void restart(int HEIGHT, boolean multiplayer, double speedBall) {
+    public static void restart(int HEIGHT, boolean multiplayer, double speedBall, double precision) {
         Color color1 = new Color(36, 36, 220);
         player1 = new Player(240, HEIGHT - 24, color1);
 
         Color color2 = new Color(220, 36, 36);
         if (multiplayer) {
             player2 = new Player(240, 8, color2);
+        } else {
+            enemy = new Enemy(240, 8, color2, precision);
         }
 
-        ball = new Ball(multiplayer, speedBall);
+        ball = new Ball(multiplayer, speedBall, precision);
     }
 
     private double[] setDifficulty(int difficulty){
-        double speedBall = 2.5;
-        double enemyPrecision = 0.05;
+        double speedBall = 3.5;
+        double enemyPrecision = 0.01;
 
         if (difficulty == 1){
-            speedBall = 3;
-            enemyPrecision = 0.3;
-        }else if (difficulty == 2){
-            speedBall = 3.5;
-            enemyPrecision = 0.5;
-        }else if (difficulty == 3){
             speedBall = 4;
-            enemyPrecision = 0.7;
+            enemyPrecision = 0.025;
+        }else if (difficulty == 2){
+            speedBall = 6;
+            enemyPrecision = 0.03;
+        }else if (difficulty == 3){
+            speedBall = 7;
+            enemyPrecision = 0.04;
         }
         return new double[]{speedBall, enemyPrecision};
     }

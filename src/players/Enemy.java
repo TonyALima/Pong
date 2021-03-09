@@ -20,6 +20,6 @@ public class Enemy extends Entity{
 
     // Methods
     public void tick(){
-        this.x += (Game.getBall().x - this.x - 72 * (precision + (precision * 0.8))) * precision;
+        this.x += (Game.getBall().x - this.x - 72 ) * precision;
     }
 }

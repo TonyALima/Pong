@@ -11,11 +11,14 @@ public class Ball extends Entity {
     private double dx, dy;
     private final boolean multiplayer;
     private double speed;
+    private double enemyPrecision;
+    private static Random random = new Random();
 
 
     // Constructor
-    public Ball(boolean multiplayer, double speed) {
+    public Ball(boolean multiplayer, double speed, double enemyPrecision) {
         this.speed = speed;
+        this.enemyPrecision = enemyPrecision;
         this.multiplayer = multiplayer;
         this.x = 312;
         this.y = 232;
@@ -28,11 +31,11 @@ public class Ball extends Entity {
         if (choice) {
             do {
                 fracAngle = Math.random();
-            } while (fracAngle < (1f / 4) || fracAngle > (3f / 4));
+            } while (fracAngle < (3f / 8) || fracAngle > (5f / 8));
         } else {
             do {
                 fracAngle = (Math.random() + 1);
-            } while (fracAngle > (7f / 4) || fracAngle < (5f / 4));
+            } while (fracAngle > (13f / 8) || fracAngle < (11f / 8));
         }
 
         double angle = fracAngle * Math.PI;
@@ -56,21 +59,31 @@ public class Ball extends Entity {
             enemyBound = new Rectangle((int) Game.getPlayer2().x, (int) Game.getPlayer2().y,
                     Game.getPlayer2().width, Game.getPlayer2().height);
         }
-        Random random = new Random();
-        if (bound.intersects(playerBound)) {
+
+        int[] angles = new int[180];
+        for (int i = 0; i < 90; i++) {
+            for (int j = 45; j <= 135; j++) {
+                angles[i] = j;
+                angles[i + 90] = j + 180;
+            }
+        }
+
+        if (bound.intersects(enemyBound)) {
             double fracAngle;
             do {
-                fracAngle = (random.nextDouble() + 1);
-            } while (fracAngle > (7f / 4) || fracAngle < (5f / 4));
-            double angle = fracAngle * Math.PI;
-            this.dy = Math.sin(angle);
-        } else if (bound.intersects(enemyBound)) {
-            double fracAngle;
-            do {
-                fracAngle = random.nextDouble();
+                fracAngle = Math.random();
             } while (fracAngle < (1f / 4) || fracAngle > (3f / 4));
             double angle = fracAngle * Math.PI;
             this.dy = Math.sin(angle);
+            this.dx = Math.cos(angle);
+        } else if (bound.intersects(playerBound)) {
+            double fracAngle;
+            do {
+                fracAngle = Math.random() + 1;
+            } while (fracAngle > (7f / 4) || fracAngle < (5f / 4));
+            double angle = fracAngle * Math.PI;
+            this.dy = Math.sin(angle);
+            this.dx = Math.cos(angle);
         }
 
         if (this.x <= 0 || this.x >= (limitX - width)) {
@@ -79,10 +92,10 @@ public class Ball extends Entity {
 
         if (this.y < -height) {
             System.out.println("ponto do jogador");
-            Game.restart(limitY, multiplayer, speed);
+            Game.restart(limitY, multiplayer, speed, enemyPrecision);
         } else if (this.y > limitY) {
             System.out.println("ponto do inimigo");
-            Game.restart(limitY, multiplayer, speed);
+            Game.restart(limitY, multiplayer, speed, enemyPrecision);
         }
     }
 }
