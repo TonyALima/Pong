@@ -11,7 +11,7 @@ public class Window implements Runnable {
 
     private final Menu menuParts;
     private final Thread windowThread;
-    private static boolean play, menu, selectMultiplayer, options;
+    private static boolean play, menu, selectMultiplayer, options, keyMap;
 
     private Game game;
 
@@ -32,6 +32,7 @@ public class Window implements Runnable {
         Window.menu = false;
         Window.selectMultiplayer = false;
         Window.options = false;
+        Window.keyMap = false;
     }
 
     public static void setPlay() {
@@ -52,6 +53,11 @@ public class Window implements Runnable {
     public static void setOptions() {
         setAllFalse();
         Window.options = true;
+    }
+
+    public static void setKeyMap(){
+        setAllFalse();
+        Window.keyMap = true;
     }
 
     // Methods
@@ -89,6 +95,8 @@ public class Window implements Runnable {
                 frame.add(menuParts.getOPTIONS_PANEL());
             }else if (selectMultiplayer){
                 frame.add(menuParts.getMULTIPLAYER_PANEL());
+            }else if (keyMap){
+                frame.add(menuParts.getCONTROLS_PANEL());
             }
             frame.pack();
             frame.setLocationRelativeTo(null);

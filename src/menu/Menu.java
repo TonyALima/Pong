@@ -12,13 +12,17 @@ public class Menu {
     private final JButton OPTIONS;
     private final JButton SINGLE_PLAYER_BUTTON;
     private final JButton MULTIPLAYER_BUTTON;
+    private final JButton OK;
 
     private final JPanel MENU_PANEL;
     private final JPanel OPTIONS_PANEL;
     private final JPanel MULTIPLAYER_PANEL;
+    private final JPanel CONTROLS_PANEL;
 
     private final JLabel NAME_LABEL;
     private final JLabel SELECT_LABEL;
+    private final JLabel KEY_INSTRUCT_LABEL;
+    private final JLabel KEY_MAP_LABEL;
 
     private final JComboBox<String> DIFFICULTY;
     private final Color BACK_BUTTONS_COLOR = new Color(100, 100, 100);
@@ -28,23 +32,30 @@ public class Menu {
     private final Thread windowThread;
     private boolean multiplayer;
     private int difficultyLevel;
+    private final Keys keys;
 
     // Constructor
     public Menu(Thread windowThread) {
+        this.keys = new Keys();
+
         this.SELECT_LABEL = new JLabel("Dificuldade");
         this.NAME_LABEL = new JLabel("Bom dia");
+        this.KEY_INSTRUCT_LABEL = new JLabel("CONTROLES ");
+        this.KEY_MAP_LABEL = new JLabel();
 
         this.SINGLE_PLAYER_BUTTON = new JButton("Single player");
         this.MULTIPLAYER_BUTTON = new JButton("Multiplayer");
         this.SELECT_MULTIPLAYER_BUTTON = new JButton("Numero de jogadores");
         this.PLAY_BUTTON = new JButton("PLAY");
         this.OPTIONS = new JButton("Opções");
+        this.OK = new JButton("OK");
 
         this.DIFFICULTY = new JComboBox<>();
         startComponents();
         this.MENU_PANEL = new JPanel();
         this.OPTIONS_PANEL = new JPanel();
         this.MULTIPLAYER_PANEL = new JPanel();
+        this.CONTROLS_PANEL = new JPanel();
         startPanels();
         this.windowThread = windowThread;
     }
@@ -70,17 +81,23 @@ public class Menu {
         return difficultyLevel;
     }
 
+    public JPanel getCONTROLS_PANEL() {
+        return CONTROLS_PANEL;
+    }
+
     // Methods
     private void startComponents() {
         NAME_LABEL.setFont(FONT);
         SELECT_LABEL.setFont(FONT);
+        ImageIcon icon = new ImageIcon(keys.getKeys());
+        KEY_MAP_LABEL.setIcon(icon);
 
         MULTIPLAYER_BUTTON.setBackground(BACK_BUTTONS_COLOR);
         MULTIPLAYER_BUTTON.setForeground(FONT_COLOR);
         MULTIPLAYER_BUTTON.setFont(FONT);
         MULTIPLAYER_BUTTON.addActionListener(e -> {
             this.multiplayer = true;
-            Window.setMenu();
+            Window.setKeyMap();
             synchronized (windowThread) {
                 windowThread.notify();
             }
@@ -91,11 +108,11 @@ public class Menu {
         SINGLE_PLAYER_BUTTON.setFont(FONT);
         SINGLE_PLAYER_BUTTON.addActionListener(e -> {
             this.multiplayer = false;
-            Window.setMenu();
+            Window.setKeyMap();
             synchronized (windowThread) {
                 windowThread.notify();
             }
-        });
+        }); // go to key map panel
 
         SELECT_MULTIPLAYER_BUTTON.setBackground(BACK_BUTTONS_COLOR);
         SELECT_MULTIPLAYER_BUTTON.setFont(FONT);
@@ -125,19 +142,24 @@ public class Menu {
             synchronized (windowThread) {
                 windowThread.notify();
             }
+        }); // go to options panel
+
+        OK.setBackground(BACK_BUTTONS_COLOR);
+        OK.setForeground(FONT_COLOR);
+        OK.setFont(FONT);
+        OK.addActionListener(e -> {
+            Window.setMenu();
+            synchronized (windowThread) {
+                windowThread.notify();
+            }
         });
 
         String[] list = {"Easy", "Medium", "Hard", "God"};
 
         DIFFICULTY.setFont(FONT);
         DIFFICULTY.setModel(new DefaultComboBoxModel<>(list));
-        DIFFICULTY.addActionListener(e -> {
-            difficultyLevel = DIFFICULTY.getSelectedIndex();
-            Window.setMenu();
-            synchronized (windowThread) {
-                windowThread.notify();
-            }
-        });
+        DIFFICULTY.addActionListener(e ->
+                difficultyLevel = DIFFICULTY.getSelectedIndex());
     }
 
     private void startPanels() {
@@ -176,7 +198,8 @@ public class Menu {
                         .addGroup(
                                 selectLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
                                         .addComponent(SELECT_LABEL)
-                                        .addComponent(DIFFICULTY))
+                                        .addComponent(DIFFICULTY)
+                                        .addComponent(OK))
                         .addGap(10)
         );
         selectLayout.setVerticalGroup(
@@ -186,6 +209,8 @@ public class Menu {
                                 .addComponent(SELECT_LABEL)
                                 .addGap(10)
                                 .addComponent(DIFFICULTY)
+                                .addGap(10)
+                                .addComponent(OK)
                                 .addGap(20))
 
         );
@@ -211,5 +236,30 @@ public class Menu {
                         .addGap(20)
         );
         MULTIPLAYER_PANEL.setBackground(BACK_PANELS_COLOR);
+
+        GroupLayout keyMapLayout = new GroupLayout(CONTROLS_PANEL);
+        CONTROLS_PANEL.setLayout(keyMapLayout);
+        keyMapLayout.setHorizontalGroup(
+                keyMapLayout.createSequentialGroup()
+                        .addGap(10)
+                        .addGroup(
+                                keyMapLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                                        .addComponent(KEY_INSTRUCT_LABEL)
+                                        .addComponent(KEY_MAP_LABEL)
+                                        .addComponent(OK)
+                        )
+                        .addGap(10)
+        );
+        keyMapLayout.setVerticalGroup(
+                keyMapLayout.createSequentialGroup()
+                        .addGap(10)
+                        .addComponent(KEY_INSTRUCT_LABEL)
+                        .addGap(10)
+                        .addComponent(KEY_MAP_LABEL)
+                        .addGap(10)
+                        .addComponent(OK)
+                        .addGap(10)
+        );
+        CONTROLS_PANEL.setBackground(BACK_PANELS_COLOR);
     }
 }
