@@ -43,13 +43,13 @@ public class Game implements Runnable, KeyListener {
         this.multiplayer = multiplayer;
 
         Color color1 = new Color(36, 36, 220);
-        player1 = new Player(240, HEIGHT - 24, color1);
+        player1 = new Player(240, HEIGHT - 48, color1);
 
         Color color2 = new Color(220, 36, 36);
         if (multiplayer) {
-            player2 = new Player(240, 8, color2);
+            player2 = new Player(240, 32, color2);
         } else {
-            enemy = new Enemy(240, 8, color2, settings[1]);
+            enemy = new Enemy(240, 32, color2, settings[1]);
         }
         ball = new Ball(multiplayer, settings[0], settings[1]);
 
@@ -86,13 +86,13 @@ public class Game implements Runnable, KeyListener {
 
     public static void restart(int HEIGHT, boolean multiplayer, double speedBall, double precision) {
         Color color1 = new Color(36, 36, 220);
-        player1 = new Player(240, HEIGHT - 24, color1);
+        player1 = new Player(240, HEIGHT - 48, color1);
 
         Color color2 = new Color(220, 36, 36);
         if (multiplayer) {
-            player2 = new Player(240, 8, color2);
+            player2 = new Player(240, 32, color2);
         } else {
-            enemy = new Enemy(240, 8, color2, precision);
+            enemy = new Enemy(240, 32, color2, precision);
         }
 
         ball = new Ball(multiplayer, speedBall, precision);
