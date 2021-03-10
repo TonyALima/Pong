@@ -67,6 +67,7 @@ public class Window implements Runnable {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+        frame.setIconImage(Toolkit.getDefaultToolkit().getImage("/Pong_Icon.png"));
     }
 
     @Override
