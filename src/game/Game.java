@@ -22,13 +22,15 @@ public class Game implements Runnable, KeyListener {
     private boolean isRunning;
     private boolean pause;
     public boolean multiplayer;
-    private final Color background;
+    private final Color background = new Color(50, 50, 50);;
     private final Canvas canvas;
     private final Thread gameThread;
     private static Player player1, player2;
     private static Enemy enemy;
     private static Ball ball;
     public static int scoreUp, scoreDown;
+    private static final Color color1 = new Color(36, 36, 220);
+    private static final Color color2 = new Color(220, 36, 36);
 
     // Constructor
     public Game(boolean multiplayer, int difficultyLevel) {
@@ -43,18 +45,14 @@ public class Game implements Runnable, KeyListener {
         this.isRunning = true;
         this.multiplayer = multiplayer;
 
-        Color color1 = new Color(36, 36, 220);
         player1 = new Player(240, HEIGHT - 48, color1);
 
-        Color color2 = new Color(220, 36, 36);
         if (multiplayer) {
             player2 = new Player(240, 32, color2);
         } else {
             enemy = new Enemy(240, 32, color2, settings[1]);
         }
         ball = new Ball(multiplayer, settings[0], settings[1]);
-
-        background = new Color(50, 50, 50);
     }
 
     // Getters
@@ -89,10 +87,8 @@ public class Game implements Runnable, KeyListener {
     }
 
     public static void restart(int HEIGHT, boolean multiplayer, double speedBall, double precision) {
-        Color color1 = new Color(36, 36, 220);
         player1 = new Player(240, HEIGHT - 48, color1);
 
-        Color color2 = new Color(220, 36, 36);
         if (multiplayer) {
             player2 = new Player(240, 32, color2);
         } else {

@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class Enemy extends Entity{
 
-    private double precision;
+    private final double precision;
 
     // Constructor
     public Enemy(int x, int y, Color color, double precision){
