@@ -84,6 +84,9 @@ public class Game implements Runnable, KeyListener {
     }
 
     // Methods
+    public static void main(String[] args) {
+        new Window();
+    }
 
     public static void restart(int HEIGHT, boolean multiplayer, double speedBall, double precision) {
         Color color1 = new Color(36, 36, 220);
@@ -104,14 +107,14 @@ public class Game implements Runnable, KeyListener {
         double enemyPrecision = 0.01;
 
         if (difficulty == 1) {
-            speedBall = 4;
-            enemyPrecision = 0.025;
-        } else if (difficulty == 2) {
-            speedBall = 6;
+            speedBall = 5;
             enemyPrecision = 0.03;
-        } else if (difficulty == 3) {
+        } else if (difficulty == 2) {
             speedBall = 7;
             enemyPrecision = 0.045;
+        } else if (difficulty == 3) {
+            speedBall = 8.5;
+            enemyPrecision = 0.05;
         }
         return new double[]{speedBall, enemyPrecision};
     }
