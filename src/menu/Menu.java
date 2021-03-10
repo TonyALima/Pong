@@ -23,6 +23,7 @@ public class Menu {
     private final JLabel SELECT_LABEL;
     private final JLabel KEY_INSTRUCT_LABEL;
     private final JLabel KEY_MAP_LABEL;
+    private final JLabel PAUSE_LABEL;
 
     private final JComboBox<String> DIFFICULTY;
     private final Color BACK_BUTTONS_COLOR = new Color(100, 100, 100);
@@ -41,6 +42,7 @@ public class Menu {
         this.SELECT_LABEL = new JLabel("Dificuldade");
         this.NAME_LABEL = new JLabel("Bom dia");
         this.KEY_INSTRUCT_LABEL = new JLabel("CONTROLES ");
+        this.PAUSE_LABEL = new JLabel("Pause   :   ESC");
         this.KEY_MAP_LABEL = new JLabel();
 
         this.SINGLE_PLAYER_BUTTON = new JButton("Single player");
@@ -87,6 +89,7 @@ public class Menu {
 
     // Methods
     private void startComponents() {
+        PAUSE_LABEL.setFont(new Font("Times", Font.BOLD, 17));
         NAME_LABEL.setFont(FONT);
         SELECT_LABEL.setFont(FONT);
         ImageIcon icon = new ImageIcon(keys.getKeys());
@@ -246,6 +249,7 @@ public class Menu {
                                 keyMapLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
                                         .addComponent(KEY_INSTRUCT_LABEL)
                                         .addComponent(KEY_MAP_LABEL)
+                                        .addComponent(PAUSE_LABEL)
                                         .addComponent(OK)
                         )
                         .addGap(10)
@@ -256,6 +260,7 @@ public class Menu {
                         .addComponent(KEY_INSTRUCT_LABEL)
                         .addGap(10)
                         .addComponent(KEY_MAP_LABEL)
+                        .addComponent(PAUSE_LABEL)
                         .addGap(10)
                         .addComponent(OK)
                         .addGap(10)

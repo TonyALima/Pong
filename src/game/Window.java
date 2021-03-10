@@ -13,8 +13,6 @@ public class Window implements Runnable {
     private final Thread windowThread;
     private static boolean play, menu, selectMultiplayer, options, keyMap;
 
-    private Game game;
-
     // Constructor
     public Window() {
         this.windowThread = new Thread(this);
@@ -85,8 +83,8 @@ public class Window implements Runnable {
             frame.remove(currentIn.getComponent(0));
 
             if (play) {
-                this.game = new Game(menuParts.isMultiplayer(), menuParts.getDifficultyLevel());
-                game.getRenderThread().start();
+                Game game = new Game(menuParts.isMultiplayer(), menuParts.getDifficultyLevel());
+                game.getGameThread().start();
                 frame.add(game.getCanvas());
                 game.getCanvas().requestFocus();
             } else if (menu) {

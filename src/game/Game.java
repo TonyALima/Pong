@@ -24,7 +24,7 @@ public class Game implements Runnable, KeyListener {
     public boolean multiplayer;
     private final Color background;
     private final Canvas canvas;
-    private final Thread renderThread;
+    private final Thread gameThread;
     private static Player player1, player2;
     private static Enemy enemy;
     private static Ball ball;
@@ -39,7 +39,7 @@ public class Game implements Runnable, KeyListener {
         this.canvas = new Canvas();
         this.canvas.addKeyListener(this);
         this.canvas.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-        this.renderThread = new Thread(this);
+        this.gameThread = new Thread(this);
         this.isRunning = true;
         this.multiplayer = multiplayer;
 
@@ -59,8 +59,8 @@ public class Game implements Runnable, KeyListener {
 
     // Getters
 
-    public Thread getRenderThread() {
-        return renderThread;
+    public Thread getGameThread() {
+        return gameThread;
     }
 
     public Canvas getCanvas() {
@@ -99,17 +99,17 @@ public class Game implements Runnable, KeyListener {
         ball = new Ball(multiplayer, speedBall, precision);
     }
 
-    private double[] setDifficulty(int difficulty){
+    private double[] setDifficulty(int difficulty) {
         double speedBall = 3.5;
         double enemyPrecision = 0.01;
 
-        if (difficulty == 1){
+        if (difficulty == 1) {
             speedBall = 4;
             enemyPrecision = 0.025;
-        }else if (difficulty == 2){
+        } else if (difficulty == 2) {
             speedBall = 6;
             enemyPrecision = 0.03;
-        }else if (difficulty == 3){
+        } else if (difficulty == 3) {
             speedBall = 7;
             enemyPrecision = 0.045;
         }
@@ -148,10 +148,18 @@ public class Game implements Runnable, KeyListener {
         }
         ball.render(g);
 
-        g.setColor(new Color(200,200,200));
+        g.setColor(new Color(200, 200, 200));
         g.setFont(new Font("Times", Font.PLAIN, 20));
         g.drawString("Pontos: " + scoreUp, 280, 26);
         g.drawString("Pontos: " + scoreDown, 280, HEIGHT - 6);
+
+        if (pause) {
+            g.setColor(new Color(0, 0, 0, 70));
+            g.fillRect(0, 0, WIDTH, HEIGHT);
+            g.setFont(new Font("Times", Font.PLAIN, 50));
+            g.setColor(new Color(200, 200, 200));
+            g.drawString("PAUSE", 240, 200);
+        }
 
         g.dispose();
         g = bs.getDrawGraphics();
@@ -161,11 +169,24 @@ public class Game implements Runnable, KeyListener {
 
     @Override
     public void run() {
+        int count = 0;
+        boolean paused = false;
         long lastTime = System.nanoTime();
         double amountOfTicks = 60.0;
         double ns = 1000000000 / amountOfTicks;
         double delta = 0;
         while (isRunning) {
+            if (paused) {
+                synchronized (gameThread) {
+                    try {
+                        gameThread.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                lastTime = System.nanoTime();
+                paused = false;
+            }
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
@@ -173,6 +194,13 @@ public class Game implements Runnable, KeyListener {
                 tick();
                 render();
                 delta--;
+                if (pause) {
+                    if (count == 3) {
+                        paused = true;
+                        count = 0;
+                    }
+                    count++;
+                }
             }
         }
     }
@@ -189,9 +217,6 @@ public class Game implements Runnable, KeyListener {
         } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             player1.setLeft(true);
         }
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            pause = !pause;
-        }
         if (e.getKeyCode() == KeyEvent.VK_A) {
             if (multiplayer) {
                 player2.setLeft(true);
@@ -199,6 +224,17 @@ public class Game implements Runnable, KeyListener {
         } else if (e.getKeyCode() == KeyEvent.VK_D) {
             if (multiplayer) {
                 player2.setRight(true);
+            }
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            if (pause) {
+                pause = false;
+                synchronized (gameThread) {
+                    gameThread.notify();
+                }
+            } else {
+                pause = true;
             }
         }
     }
