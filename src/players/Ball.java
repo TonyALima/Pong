@@ -12,7 +12,7 @@ public class Ball extends Entity {
     private final boolean multiplayer;
     private double speed;
     private double enemyPrecision;
-    private static Random random = new Random();
+    private Random generator = new Random();
 
 
     // Constructor
@@ -26,24 +26,24 @@ public class Ball extends Entity {
         this.height = 16;
         this.color = new Color(200, 200, 0);
 
-        double fracAngle;
-        boolean choice = new Random().nextBoolean();
-        if (choice) {
-            do {
-                fracAngle = Math.random();
-            } while (fracAngle < (3f / 8) || fracAngle > (5f / 8));
-        } else {
-            do {
-                fracAngle = (Math.random() + 1);
-            } while (fracAngle > (13f / 8) || fracAngle < (11f / 8));
-        }
-
-        double angle = fracAngle * Math.PI;
-        this.dx = Math.cos(angle);
-        this.dy = Math.sin(angle);
+        int angle = getAngle(new Random().nextBoolean());
+        this.dx = Math.cos(Math.toRadians(angle));
+        this.dy = Math.sin(Math.toRadians(angle));
     }
 
     // Methods
+
+    private int getAngle(boolean isDown) {
+        int angle;
+        int variation = generator.nextInt(120);
+        if (isDown) {
+            angle = variation + 210;
+        } else {
+            angle = variation + 30;
+        }
+        return angle;
+    }
+
     public void tick(int limitX, int limitY) {
         this.x += dx * speed;
         this.y += dy * speed;
@@ -60,30 +60,15 @@ public class Ball extends Entity {
                     Game.getPlayer2().width, Game.getPlayer2().height);
         }
 
-        int[] angles = new int[180];
-        for (int i = 0; i < 90; i++) {
-            for (int j = 45; j <= 135; j++) {
-                angles[i] = j;
-                angles[i + 90] = j + 180;
-            }
-        }
-
+        int angle;
         if (bound.intersects(enemyBound)) {
-            double fracAngle;
-            do {
-                fracAngle = Math.random();
-            } while (fracAngle < (1f / 4) || fracAngle > (3f / 4));
-            double angle = fracAngle * Math.PI;
-            this.dy = Math.sin(angle);
-            this.dx = Math.cos(angle);
+            angle = getAngle(false);
+            this.dy = Math.sin(Math.toRadians(angle));
+            this.dx = Math.cos(Math.toRadians(angle));
         } else if (bound.intersects(playerBound)) {
-            double fracAngle;
-            do {
-                fracAngle = Math.random() + 1;
-            } while (fracAngle > (7f / 4) || fracAngle < (5f / 4));
-            double angle = fracAngle * Math.PI;
-            this.dy = Math.sin(angle);
-            this.dx = Math.cos(angle);
+            angle = getAngle(true);
+            this.dy = Math.sin(Math.toRadians(angle));
+            this.dx = Math.cos(Math.toRadians(angle));
         }
 
         if (this.x <= 0 || this.x >= (limitX - width)) {
