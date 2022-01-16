@@ -11,7 +11,7 @@ public class Keys {
     // Constructor
     public Keys() {
         try {
-            keys = ImageIO.read(getClass().getResource("../res/keys.png"));
+            keys = ImageIO.read(getClass().getResource("/res/keys.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
