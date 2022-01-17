@@ -15,7 +15,7 @@ public class Window implements Runnable {
     private Menu menuParts;
     private Hashtable<String, JPanel> panels;
     private Thread windowThread;
-    private static boolean play, menu, selectMultiplayer, options, keyMap;
+    private static boolean play, menu, gameMode, options, keyMap;
 
     // Constructor
     public Window() {
@@ -33,7 +33,7 @@ public class Window implements Runnable {
     private static void setAllFalse() {
         Window.play = false;
         Window.menu = false;
-        Window.selectMultiplayer = false;
+        Window.gameMode = false;
         Window.options = false;
         Window.keyMap = false;
     }
@@ -50,7 +50,7 @@ public class Window implements Runnable {
 
     public static void setMultiplayer() {
         setAllFalse();
-        Window.selectMultiplayer = true;
+        Window.gameMode = true;
     }
 
     public static void setOptions() {
@@ -67,7 +67,7 @@ public class Window implements Runnable {
     private void initFrame() {
         frame = new JFrame("PONG");
         frame.setPreferredSize(new DimensionUIResource(300, 200));
-        frame.add(panels.get("multiplayer"));
+        frame.add(panels.get("gameMode"));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setIconImage(Toolkit.getDefaultToolkit().getImage("/Pong_Icon.png"));
@@ -105,8 +105,8 @@ public class Window implements Runnable {
             } else if (options) {
                 frame.add(panels.get("options"));
                 frame.setPreferredSize(new DimensionUIResource(300, 450));
-            }else if (selectMultiplayer){
-                frame.add(panels.get("multiplayer"));
+            }else if (gameMode){
+                frame.add(panels.get("gameMode"));
                 frame.setPreferredSize(new DimensionUIResource(300, 200));
             }else if (keyMap){
                 frame.add(panels.get("controls"));

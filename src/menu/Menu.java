@@ -6,28 +6,23 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.DefaultComboBoxModel;
-import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.util.Hashtable;
 
 public class Menu {
 
-    private JPanel menu_panel;
-    private JPanel optionsPanel;
-    private JPanel multiplayerPanel;
-    private JPanel controlsPanel;
+    private GamePanel menuPanel;
+    private GamePanel optionsPanel;
+    private GamePanel gameModePanel;
+    private GamePanel controlsPanel;
     private Thread windowThread;
     private boolean multiplayer;
     private int difficultyLevel;
 
     // Constructor
     public Menu(Thread windowThread) {
-        this.menu_panel = new JPanel();
-        this.optionsPanel = new JPanel();
-        this.multiplayerPanel = new JPanel();
-        this.controlsPanel = new JPanel();
         startComponents();
         this.windowThread = windowThread;
     }
@@ -43,16 +38,15 @@ public class Menu {
 
     public Hashtable<String, JPanel> getPanels() {
         Hashtable<String, JPanel> panels = new Hashtable<String, JPanel>();
-        panels.put("menu", menu_panel);
+        panels.put("menu", menuPanel);
         panels.put("options", optionsPanel);
-        panels.put("multiplayer", multiplayerPanel);
+        panels.put("gameMode", gameModePanel);
         panels.put("controls", controlsPanel);
         return panels;
     } 
 
     // Methods
     private void startComponents() {
-        Color BACK_PANELS_COLOR = new Color(200, 200, 200);
         Font FONT = new Font("Times", Font.BOLD, 15);
         
         JLabel selectLabel = new JLabel("Dificuldade");
@@ -132,40 +126,18 @@ public class Menu {
             }
         });
 
-        String[] list = {"Easy", "Medium", "Hard", "God"};
-
         difficulty.setFont(FONT);
-        difficulty.setModel(new DefaultComboBoxModel<>(list));
+        difficulty.setModel(new DefaultComboBoxModel<>(new String[]{"Easy", "Medium", "Hard", "God"}));
         difficulty.addActionListener(e ->
-                difficultyLevel = difficulty.getSelectedIndex());
+            difficultyLevel = difficulty.getSelectedIndex()
+        );
 
-        menu_panel.setLayout(new GridLayout(5, 1, 0, 10));
-        menu_panel.setBackground(BACK_PANELS_COLOR);
-        menu_panel.add(nameLabel);
-        menu_panel.add(selectMultiplayerButton);
-        menu_panel.add(optionsButton);
-        menu_panel.add(playButton);
-        menu_panel.setOpaque(true);
+        menuPanel = new GamePanel(new JComponent[]{nameLabel, selectMultiplayerButton, optionsButton, playButton});
 
-        optionsPanel.setLayout(new GridLayout(3, 1, 0, 10));
-        optionsPanel.setBackground(BACK_PANELS_COLOR);
-        optionsPanel.add(selectLabel);
-        optionsPanel.add(difficulty);
-        optionsPanel.add(okButton1);
-        optionsPanel.setOpaque(true);
+        optionsPanel = new GamePanel(new JComponent[]{selectLabel, difficulty,  okButton1});
 
-        multiplayerPanel.setLayout(new GridLayout(2, 1, 0, 10));
-        multiplayerPanel.setBackground(BACK_PANELS_COLOR);
-        multiplayerPanel.add(multiplayerButton);
-        multiplayerPanel.add(singlePlayerButton);
-        multiplayerPanel.setOpaque(true);
+        gameModePanel = new GamePanel(new JComponent[]{multiplayerButton, singlePlayerButton});
 
-        controlsPanel.setLayout(new GridLayout(4, 1, 0, 10));
-        controlsPanel.setBackground(BACK_PANELS_COLOR);
-        controlsPanel.add(keyInstructLabel);
-        controlsPanel.add(keyMapLabel);
-        controlsPanel.add(pauseLabel);
-        controlsPanel.add(okButton2);
-        controlsPanel.setOpaque(true);
+        controlsPanel = new GamePanel(new JComponent[]{keyInstructLabel, keyMapLabel, pauseLabel, okButton2});
     }
 }
