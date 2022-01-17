@@ -66,8 +66,8 @@ public class Window implements Runnable {
     // Methods
     private void initFrame() {
         frame = new JFrame("PONG");
-        frame.setPreferredSize(new DimensionUIResource(300, 200));
-        frame.add(panels.get("gameMode"));
+        frame.setPreferredSize(new DimensionUIResource(300, 550));
+        frame.add(panels.get("menu"));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setIconImage(Toolkit.getDefaultToolkit().getImage("/Pong_Icon.png"));

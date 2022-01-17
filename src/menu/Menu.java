@@ -71,7 +71,7 @@ public class Menu {
         GameButton multiplayerButton = new GameButton("Multiplayer");
         multiplayerButton.addActionListener(e -> {
             this.multiplayer = true;
-            Window.setKeyMap();
+            Window.setMenu();
             synchronized (windowThread) {
                 windowThread.notify();
             }
@@ -80,7 +80,7 @@ public class Menu {
         GameButton singlePlayerButton = new GameButton("Singleplayer");
         singlePlayerButton.addActionListener(e -> {
             this.multiplayer = false;
-            Window.setKeyMap();
+            Window.setMenu();
             synchronized (windowThread) {
                 windowThread.notify();
             }
@@ -96,7 +96,7 @@ public class Menu {
 
         GameButton playButton = new GameButton("PLAY");
         playButton.addActionListener(e -> {
-            Window.setPlay();
+            Window.setKeyMap();
             synchronized (windowThread) {
                 windowThread.notify();
             }
@@ -110,17 +110,17 @@ public class Menu {
             }
         }); // go to options panel
 
-        GameButton okButton1 = new GameButton("OK");
-        okButton1.addActionListener(e -> {
+        GameButton okButton = new GameButton("OK");
+        okButton.addActionListener(e -> {
             Window.setMenu();
             synchronized (windowThread) {
                 windowThread.notify();
             }
         });
 
-        GameButton okButton2 = new GameButton("OK");
-        okButton2.addActionListener(e -> {
-            Window.setMenu();
+        GameButton okToPlayButton = new GameButton("OK");
+        okToPlayButton.addActionListener(e -> {
+            Window.setPlay();
             synchronized (windowThread) {
                 windowThread.notify();
             }
@@ -134,10 +134,10 @@ public class Menu {
 
         menuPanel = new GamePanel(new JComponent[]{nameLabel, selectMultiplayerButton, optionsButton, playButton});
 
-        optionsPanel = new GamePanel(new JComponent[]{selectLabel, difficulty,  okButton1});
+        optionsPanel = new GamePanel(new JComponent[]{selectLabel, difficulty,  okButton});
 
         gameModePanel = new GamePanel(new JComponent[]{multiplayerButton, singlePlayerButton});
 
-        controlsPanel = new GamePanel(new JComponent[]{keyInstructLabel, keyMapLabel, pauseLabel, okButton2});
+        controlsPanel = new GamePanel(new JComponent[]{keyInstructLabel, keyMapLabel, pauseLabel, okToPlayButton});
     }
 }
