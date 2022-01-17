@@ -1,11 +1,13 @@
 package game;
 
+import menu.GamePanel;
 import menu.Menu;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.plaf.DimensionUIResource;
 import java.awt.Toolkit;
+import java.awt.BorderLayout;
 import java.util.Hashtable;
 
 public class Window implements Runnable {
@@ -67,7 +69,11 @@ public class Window implements Runnable {
     private void initFrame() {
         frame = new JFrame("PONG");
         frame.setPreferredSize(new DimensionUIResource(300, 550));
-        frame.add(panels.get("menu"));
+        frame.add(panels.get("menu"), BorderLayout.CENTER);
+        frame.add(new GamePanel(), BorderLayout.SOUTH);
+        frame.add(new GamePanel(), BorderLayout.NORTH);
+        frame.add(new GamePanel(), BorderLayout.EAST);
+        frame.add(new GamePanel(), BorderLayout.WEST);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setIconImage(Toolkit.getDefaultToolkit().getImage("/Pong_Icon.png"));
@@ -95,21 +101,21 @@ public class Window implements Runnable {
             if (play) {
                 Game game = new Game(menuParts.isMultiplayer(), menuParts.getDifficultyLevel());
                 game.getGameThread().start();
-                frame.add(game.getCanvas());
-                frame.setPreferredSize(new DimensionUIResource(640, 480));
+                frame.add(game.getCanvas(), BorderLayout.CENTER);
+                frame.setPreferredSize(new DimensionUIResource(700, 540));
                 game.getCanvas().requestFocus();
                 frame.setResizable(false);
             } else if (menu) {
-                frame.add(panels.get("menu"));
+                frame.add(panels.get("menu"), BorderLayout.CENTER);
                 frame.setPreferredSize(new DimensionUIResource(300, 550));
             } else if (options) {
-                frame.add(panels.get("options"));
+                frame.add(panels.get("options"), BorderLayout.CENTER);
                 frame.setPreferredSize(new DimensionUIResource(300, 450));
             }else if (gameMode){
-                frame.add(panels.get("gameMode"));
+                frame.add(panels.get("gameMode"), BorderLayout.CENTER);
                 frame.setPreferredSize(new DimensionUIResource(300, 200));
             }else if (keyMap){
-                frame.add(panels.get("controls"));
+                frame.add(panels.get("controls"), BorderLayout.CENTER);
                 frame.setPreferredSize(new DimensionUIResource(300, 500));
             }
             frame.pack();
