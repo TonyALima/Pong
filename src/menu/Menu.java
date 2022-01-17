@@ -46,9 +46,7 @@ public class Menu {
 
     // Methods
     private void startComponents() {
-        Color BACK_BUTTONS_COLOR = new Color(100, 100, 100);
         Color BACK_PANELS_COLOR = new Color(200, 200, 200);
-        Color FONT_COLOR = new Color(220, 220, 220);
         Font FONT = new Font("Times", Font.BOLD, 15);
         
         JLabel selectLabel = new JLabel("Dificuldade");
@@ -58,14 +56,7 @@ public class Menu {
         JLabel keyMapLabel = new JLabel();
         JComboBox<String> difficulty = new JComboBox<>();
         Keys keys = new Keys();
-        JButton multiplayerButton = new JButton("Multiplayer");
-        JButton singlePlayerButton = new JButton("Single player");
-        JButton selectMultiplayerButton = new JButton("Numero de jogadores");
-        JButton playButton = new JButton("PLAY");
-        JButton optionsButton = new JButton("Opções");
-        JButton okButton1 = new JButton("OK");
-        JButton okButton2 = new JButton("OK");
-
+        
         pauseLabel.setFont(new Font("Times", Font.BOLD, 17));
         pauseLabel.setHorizontalAlignment(JLabel.CENTER);
         nameLabel.setFont(FONT);
@@ -77,9 +68,7 @@ public class Menu {
         keyMapLabel.setHorizontalAlignment(JLabel.CENTER);
         keyInstructLabel.setHorizontalAlignment(JLabel.CENTER);
         
-        multiplayerButton.setBackground(BACK_BUTTONS_COLOR);
-        multiplayerButton.setForeground(FONT_COLOR);
-        multiplayerButton.setFont(FONT);
+        GameButton multiplayerButton = new GameButton("Multiplayer");
         multiplayerButton.addActionListener(e -> {
             this.multiplayer = true;
             Window.setKeyMap();
@@ -88,9 +77,7 @@ public class Menu {
             }
         });
 
-        singlePlayerButton.setBackground(BACK_BUTTONS_COLOR);
-        singlePlayerButton.setForeground(FONT_COLOR);
-        singlePlayerButton.setFont(FONT);
+        GameButton singlePlayerButton = new GameButton("Singleplayer");
         singlePlayerButton.addActionListener(e -> {
             this.multiplayer = false;
             Window.setKeyMap();
@@ -99,9 +86,7 @@ public class Menu {
             }
         }); // go to key map panel
 
-        selectMultiplayerButton.setBackground(BACK_BUTTONS_COLOR);
-        selectMultiplayerButton.setFont(FONT);
-        selectMultiplayerButton.setForeground(FONT_COLOR);
+        GameButton selectMultiplayerButton = new GameButton("Game mode");
         selectMultiplayerButton.addActionListener(e -> {
             Window.setMultiplayer();
             synchronized (windowThread) {
@@ -109,9 +94,7 @@ public class Menu {
             }
         }); // go to selectPanel
 
-        playButton.setBackground(BACK_BUTTONS_COLOR);
-        playButton.setFont(FONT);
-        playButton.setForeground(FONT_COLOR);
+        GameButton playButton = new GameButton("PLAY");
         playButton.addActionListener(e -> {
             Window.setPlay();
             synchronized (windowThread) {
@@ -119,9 +102,7 @@ public class Menu {
             }
         }); // go to the game
 
-        optionsButton.setBackground(BACK_BUTTONS_COLOR);
-        optionsButton.setFont(FONT);
-        optionsButton.setForeground(FONT_COLOR);
+        GameButton optionsButton = new GameButton("Options");
         optionsButton.addActionListener(e -> {
             Window.setOptions();
             synchronized (windowThread) {
@@ -129,9 +110,7 @@ public class Menu {
             }
         }); // go to options panel
 
-        okButton1.setBackground(BACK_BUTTONS_COLOR);
-        okButton1.setFont(FONT);
-        okButton1.setForeground(FONT_COLOR);
+        GameButton okButton1 = new GameButton("OK");
         okButton1.addActionListener(e -> {
             Window.setMenu();
             synchronized (windowThread) {
@@ -139,9 +118,7 @@ public class Menu {
             }
         });
 
-        okButton2.setBackground(BACK_BUTTONS_COLOR);
-        okButton2.setFont(FONT);
-        okButton2.setForeground(FONT_COLOR);
+        GameButton okButton2 = new GameButton("OK");
         okButton2.addActionListener(e -> {
             Window.setMenu();
             synchronized (windowThread) {
