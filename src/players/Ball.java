@@ -1,8 +1,8 @@
 package players;
 
 import game.Game;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Rectangle;
 import java.util.Random;
 
 public class Ball extends Entity {

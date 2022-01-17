@@ -1,7 +1,7 @@
 package menu;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Image;
 import java.io.IOException;
 
 public class Keys {

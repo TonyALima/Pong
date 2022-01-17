@@ -4,7 +4,12 @@ import players.Ball;
 import players.Enemy;
 import players.Player;
 
-import java.awt.*;
+import java.awt.Image;
+import java.awt.Color;
+import java.awt.Canvas;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;

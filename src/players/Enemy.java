@@ -1,8 +1,7 @@
 package players;
 
 import game.Game;
-
-import java.awt.*;
+import java.awt.Color;
 
 public class Enemy extends Entity{
 

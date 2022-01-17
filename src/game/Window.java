@@ -2,9 +2,10 @@ package game;
 
 import menu.Menu;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.plaf.DimensionUIResource;
-import java.awt.*;
+import java.awt.Toolkit;
 import java.util.Hashtable;
 
 public class Window implements Runnable {
